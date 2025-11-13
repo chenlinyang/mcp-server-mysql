@@ -7,7 +7,7 @@ import {
   isUpdateAllowedForSchema,
   isDeleteAllowedForSchema,
 } from "./permissions.js";
-import { extractSchemaFromQuery, getQueryTypes } from "./utils.js";
+import { extractSchemaFromQuery, getQueryTypes, validateDatabaseAccess, sanitizeQuery } from "./utils.js";
 
 import * as mysql2 from "mysql2/promise";
 import { log } from "./../utils/index.js";
@@ -71,12 +71,35 @@ async function executeQuery<T>(sql: string, params: string[] = []): Promise<T> {
 async function executeWriteQuery<T>(sql: string): Promise<T> {
   let connection;
   try {
+    // Get target database from environment
+    const targetDb = process.env.MYSQL_DB;
+
+    // Validate database access if target database is set
+    if (targetDb && !isMultiDbMode) {
+      const validation = validateDatabaseAccess(sql, targetDb);
+      if (!validation.isValid) {
+        log("error", `Database access validation failed: ${validation.error}`);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Database access error: ${validation.error}`,
+            },
+          ],
+          isError: true,
+        } as T;
+      }
+
+      // Sanitize query to ensure database boundaries are respected
+      sql = sanitizeQuery(sql, targetDb);
+    }
+
     const pool = await getPool();
     connection = await pool.getConnection();
     log("error", "Write connection acquired");
 
     // Extract schema for permissions (if needed)
-    const schema = extractSchemaFromQuery(sql);
+    const schema = extractSchemaFromQuery(sql, targetDb);
 
     // @INFO: Begin transaction for write operation
     await connection.beginTransaction();
@@ -179,8 +202,31 @@ async function executeReadOnlyQuery<T>(sql: string): Promise<T> {
     // Check the type of query
     const queryTypes = await getQueryTypes(sql);
 
+    // Get target database from environment
+    const targetDb = process.env.MYSQL_DB;
+
+    // Validate database access if target database is set
+    if (targetDb && !isMultiDbMode) {
+      const validation = validateDatabaseAccess(sql, targetDb);
+      if (!validation.isValid) {
+        log("error", `Database access validation failed: ${validation.error}`);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Database access error: ${validation.error}`,
+            },
+          ],
+          isError: true,
+        } as T;
+      }
+
+      // Sanitize query to ensure database boundaries are respected
+      sql = sanitizeQuery(sql, targetDb);
+    }
+
     // Get schema for permission checking
-    const schema = extractSchemaFromQuery(sql);
+    const schema = extractSchemaFromQuery(sql, targetDb);
 
     const isUpdateOperation = queryTypes.some((type) =>
       ["update"].includes(type),
