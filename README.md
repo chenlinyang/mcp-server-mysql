@@ -1,6 +1,6 @@
 # MySQL MCP 服务 - Claude Code
 
-> **🚀 这是一个 MySQL MCP 服务，适用于最新版本 Claude Code **
+> **🚀 这是一个 MySQL MCP 服务，适用于最新版本 Claude Code**
 > 
 > 本项目是基于 [@benborla29](https://github.com/benborla) 的 [mcp-server-mysql](https://github.com/benborla/mcp-server-mysql) 项目，针对 Claude Code 做的增强优化
 
@@ -208,7 +208,7 @@
 
 - 结合agent进行架构分析
 
-> ** 数据库架构师** 提示词参参考`.claude\agents\database-architect.md`
+> ** 数据库架构师** 提示词参考`.claude\agents\database-architect.md`
 
 <img src="./assets/agent-analysis-1.png" width = "996" alt="结合agent进行架构分析1" />
 
