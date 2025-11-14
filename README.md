@@ -1,10 +1,8 @@
 # MySQL MCP 服务 - Claude Code
 
-> **🚀 这是一个优化版，适用于最新版本 Claude Code **
+> **🚀 这是一个 MySQL MCP 服务，适用于最新版本 Claude Code **
 > 
-> ** 原项目地址：** https://github.com/benborla/mcp-server-mysql
->
-> **许可证：** MIT
+> 本项目是基于 [@benborla29](https://github.com/benborla) 的 [mcp-server-mysql](https://github.com/benborla/mcp-server-mysql) 项目，针对 Claude Code 做的增强优化
 
 # 基于 NodeJS 的 MySQL MCP 服务
 
@@ -12,7 +10,7 @@
 
 ### 此分支的主要特点：
 
-- ✅ **最新 Claude Code 兼容** - 完全兼容最新版本的 Claude Code CLI，提供稳定的数据库访问体验
+- ✅ **最新 Claude Code 兼容** - 完全兼容最新版本的 Claude Code ，提供稳定的数据库访问体验
 - ✅ **增强数据库访问验证** - 当设置 `MYSQL_DB` 时，严格验证 SQL 查询的数据库访问，确保查询只作用于指定数据库，避免意外的跨库操作
 - ✅ **SSH 隧道支持** - 内置支持远程数据库的 SSH 隧道
 - ✅ **自动启动 / 停止钩子** - 与 Claude 启动 / 停止配合的自动隧道管理
@@ -69,7 +67,7 @@
 
 ### Claude Code
 
-本项目专为 Claude Code CLI 优化，提供完整的 MySQL 数据库访问功能。请按照下方的安装指南进行配置。
+本项目专为 Claude Code 优化，提供完整的 MySQL 数据库访问功能。请按照下方的安装指南进行配置。
 
 ### 从本地仓库运行
 
@@ -99,9 +97,9 @@
    pnpm run build
    ```
 
-4. **配置 Claude Code CLI**
+4. **配置 Claude Code **
 
-   将以下内容添加到您的 Claude Code CLI配置文件（Linux和MacOS一般是`~/.claude.json`，windows一般是`%USERPROFILE%/.claude.json`）：
+   将以下内容添加到您的 Claude Code 配置文件（Linux和MacOS一般是`~/.claude.json`，windows一般是`%USERPROFILE%/.claude.json`）：
 
    ```json
    {
@@ -140,7 +138,7 @@
    node dist/index.js
    ```
 
-   如果它成功连接到 MySQL，您就可以将其与 Claude Code CLI一起使用了。
+   如果它成功连接到 MySQL，您就可以将其与 Claude Code 一起使用了。
 
 ### 以全局模式安装运行
 
@@ -154,7 +152,7 @@
    pnpm add -g @chenlinyang/mcp-server-mysql
    ```
 
-2. **配置 Claude Code CLI**
+2. **配置 Claude Code **
 - **方法一：使用命令行**
 
    ```bash
@@ -163,7 +161,7 @@
 
 - **方法二：手动配置**
 
-   将以下内容添加到您的 Claude Code CLI 配置文件（`.claude.json`）：
+   将以下内容添加到您的 Claude Code 配置文件（`.claude.json`）：
 
    ```json
    {
@@ -188,19 +186,19 @@
 
    将此仓库中的 .env 文件内容复制粘贴到您刚创建的 .env 文件中。
 
-4. **验证**
+   4. **验证**
 
-   添加服务后，验证其配置是否正确：
+      添加服务后，验证其配置是否正确：
 
-   ```bash
-# 列出所有配置的MCP服务
-claude mcp list
-
-# 获取 MySQL 服务器的详细信息
-claude mcp get mcp_server_mysql
-
-# 在 Claude Code 中检查服务状态
-/mcp
+```bash
+       # 列出所有配置的MCP服务
+       claude mcp list
+    
+       # 获取 MySQL 服务器的详细信息
+       claude mcp get mcp_server_mysql
+    
+       # 在 Claude Code 中检查服务状态
+       /mcp
 ```
 <img src="./assets/mcp-list.png" width = "996" alt="列出所有配置的MCP服务" />
 
@@ -209,6 +207,8 @@ claude mcp get mcp_server_mysql
 <img src="./assets/single-analysis.png" width = "996" alt="简单的统计分析" />
 
 - 结合agent进行架构分析
+
+> ** 数据库架构师** 提示词参参考`.claude\agents\database-architect.md`
 
 <img src="./assets/agent-analysis-1.png" width = "996" alt="结合agent进行架构分析1" />
 
@@ -543,7 +543,3 @@ OPENAI_API_KEY=your-key  npx mcp-eval evals.ts index.ts
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request 来改进这个项目。
-
-## 原项目
-
-本项目是基于 [@benborla29](https://github.com/benborla) 的 [mcp-server-mysql](https://github.com/benborla/mcp-server-mysql) 项目的优化版本，专门针对 Claude Code 进行了增强优化。
