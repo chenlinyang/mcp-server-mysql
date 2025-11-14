@@ -1,288 +1,85 @@
-# MCP Server for MySQL - Claude Code Edition
+# MySQL  MCP 服务 - Claude Code
 
-> **🚀 This is a modified version optimized for Claude Code with SSH tunnel support**  
-> **Original Author:** [@benborla29](https://github.com/benborla)  
-> **Original Repository:** https://github.com/benborla/mcp-server-mysql  
-> **License:** MIT  
+> **🚀 这是一个优化版，适用于 Claude Code 并支持 SSH 隧道****原作者：** [@benborla29](https://github.com/benborla)**原仓库：** https://github.com/benborla/mcp-server-mysql**许可证：** MIT
 
-# MCP Server for MySQL based on NodeJS
-[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/benborla/mcp-server-mysql)](https://archestra.ai/mcp-catalog/benborla__mcp-server-mysql)
+# 基于 NodeJS 的 MySQL MCP 服务器
 
+![img](data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2781%27%20height=%2710%27/%3e)![image](https://archestra.ai/mcp-catalog/api/badge/quality/benborla/mcp-server-mysql)
 
-### Key Features of This Fork:
-- ✅ **Claude Code Integration** - Optimized for use with Anthropic's Claude Code CLI
-- ✅ **SSH Tunnel Support** - Built-in support for SSH tunnels to remote databases
-- ✅ **Auto-start/stop Hooks** - Automatic tunnel management with Claude start/stop
-- ✅ **DDL Operations** - Added `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS` for CREATE TABLE support
-- ✅ **Multi-Project Setup** - Easy configuration for multiple projects with different databases
+### 此分支的主要特点：
 
-### Quick Start for Claude Code Users:
-1. **Read the Setup Guide**: See [PROJECT_SETUP_GUIDE.md](PROJECT_SETUP_GUIDE.md) for detailed instructions
-2. **Configure SSH Tunnels**: Set up automatic SSH tunnels for remote databases
-3. **Use with Claude**: Integrated MCP server works seamlessly with Claude Code
+- ✅ **Claude Code 集成** - 优化版用于 Anthropic 的 Claude Code CLI
+- ✅ **SSH 隧道支持** - 内置支持远程数据库的 SSH 隧道
+- ✅ **自动启动 / 停止钩子** - 与 Claude 启动 / 停止配合的自动隧道管理
+- ✅ **DDL 操作** - 添加了 `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS` 以支持 CREATE TABLE
+- ✅ **多项目设置** - 轻松配置多个具有不同数据库的项目
 
-A Model Context Protocol server that provides access to MySQL databases through SSH tunnels. This server enables Claude and other LLMs to inspect database schemas and execute SQL queries securely.
+### Claude Code 用户快速入门：
 
-## Table of Contents
+1. **阅读设置指南**：详见 [PROJECT_SETUP_GUIDE.md](https://www.doubao.com/chat/PROJECT_SETUP_GUIDE.md) 获取详细说明
+2. **配置 SSH 隧道**：为远程数据库设置自动 SSH 隧道
+3. **与 Claude 配合使用**：集成的 MCP 服务与 Claude Code 无缝协作
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-  - [Smithery](#using-smithery)
-  - [Clone to Local Repository](#running-from-local-repository)
-  - [Remote mode](#run-in-remote-mode)
-- [Components](#components)
-- [Configuration](#configuration)
-- [Environment Variables](#environment-variables)
-- [Multi-DB Mode](#multi-db-mode)
-- [Schema-Specific Permissions](#schema-specific-permissions)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+一个模型上下文协议服务器，通过 SSH 隧道提供对 MySQL 数据库的访问。该服务器使 Claude 和其他大型语言模型能够安全地检查数据库模式和执行 SQL 查询。
 
-## Requirements
+## 目录
 
-- Node.js v20 or higher
-- MySQL 5.7 or higher (MySQL 8.0+ recommended)
-- MySQL user with appropriate permissions for the operations you need
-- For write operations: MySQL user with INSERT, UPDATE, and/or DELETE privileges
+- [要求](https://www.doubao.com/chat/29099296980827906#要求)
+- 安装
+  - [Smithery](https://www.doubao.com/chat/29099296980827906#使用-smithery)
+  - [克隆到本地仓库](https://www.doubao.com/chat/29099296980827906#从本地仓库运行)
+  - [远程模式](https://www.doubao.com/chat/29099296980827906#以远程模式运行)
+- [组件](https://www.doubao.com/chat/29099296980827906#组件)
+- [配置](https://www.doubao.com/chat/29099296980827906#配置)
+- [环境变量](https://www.doubao.com/chat/29099296980827906#环境变量)
+- [多数据库模式](https://www.doubao.com/chat/29099296980827906#多数据库模式)
+- [模式特定权限](https://www.doubao.com/chat/29099296980827906#模式特定权限)
+- [测试](https://www.doubao.com/chat/29099296980827906#测试)
+- [故障排除](https://www.doubao.com/chat/29099296980827906#故障排除)
+- [贡献](https://www.doubao.com/chat/29099296980827906#贡献)
+- [许可证](https://www.doubao.com/chat/29099296980827906#许可证)
 
-## Installation
+## 要求
 
-### Using Smithery
+- Node.js v22 或更高版本
+- MySQL 5.7 或更高版本（推荐 MySQL 8.0+）
+- 具有所需操作适当权限的 MySQL 用户
+- 对于写入操作：具有 INSERT、UPDATE 或 DELETE 权限的 MySQL 用户
 
-There are several ways to install and configure the MCP server but the most common would be checking this website [https://smithery.ai/server/@benborla29/mcp-server-mysql](https://smithery.ai/server/@benborla29/mcp-server-mysql)
-
-### Cursor
-
-For Cursor IDE, you can install this MCP server with the following command in your project:
-
-1. Visit [https://smithery.ai/server/@benborla29/mcp-server-mysql](https://smithery.ai/server/@benborla29/mcp-server-mysql)
-2. Follow the instruction for Cursor
-
-MCP Get provides a centralized registry of MCP servers and simplifies the installation process.
+## 安装
 
 ### Claude Code
 
-#### Option 1: Import from Claude Desktop (Recommended if already configured)
+### 从本地仓库运行
 
-If you already have this MCP server configured in Claude Desktop, you can import it automatically:
+如果要直接从源代码克隆并运行此 MCP 服务器，请按照以下步骤操作：
 
-```bash
-claude mcp add-from-claude-desktop
-```
-
-This will show an interactive dialog where you can select your `mcp_server_mysql` server to import with all existing configuration.
-
-#### Option 2: Manual Configuration
-
-**Using NPM/PNPM Global Installation:**
-
-First, install the package globally:
-
-```bash
-# Using npm
-npm install -g @benborla29/mcp-server-mysql
-
-# Using pnpm
-pnpm add -g @benborla29/mcp-server-mysql
-```
-
-Then add the server to Claude Code:
-
-```bash
-claude mcp add mcp_server_mysql \
-  -e MYSQL_HOST="127.0.0.1" \
-  -e MYSQL_PORT="3306" \
-  -e MYSQL_USER="root" \
-  -e MYSQL_PASS="your_password" \
-  -e MYSQL_DB="your_database" \
-  -e ALLOW_INSERT_OPERATION="false" \
-  -e ALLOW_UPDATE_OPERATION="false" \
-  -e ALLOW_DELETE_OPERATION="false" \
-  -- npx @benborla29/mcp-server-mysql
-```
-
-**Using Local Repository (for development):**
-
-If you're running from a cloned repository:
-
-```bash
-claude mcp add mcp_server_mysql \
-  -e MYSQL_HOST="127.0.0.1" \
-  -e MYSQL_PORT="3306" \
-  -e MYSQL_USER="root" \
-  -e MYSQL_PASS="your_password" \
-  -e MYSQL_DB="your_database" \
-  -e ALLOW_INSERT_OPERATION="false" \
-  -e ALLOW_UPDATE_OPERATION="false" \
-  -e ALLOW_DELETE_OPERATION="false" \
-  -e PATH="/path/to/node/bin:/usr/bin:/bin" \
-  -e NODE_PATH="/path/to/node/lib/node_modules" \
-  -- /path/to/node /full/path/to/mcp-server-mysql/dist/index.js
-```
-
-Replace:
-
-- `/path/to/node` with your Node.js binary path (find with `which node`)
-- `/full/path/to/mcp-server-mysql` with the full path to your cloned repository
-- Update MySQL credentials to match your environment
-
-**Using Unix Socket Connection:**
-
-For local MySQL instances using Unix sockets:
-
-```bash
-claude mcp add mcp_server_mysql \
-  -e MYSQL_SOCKET_PATH="/tmp/mysql.sock" \
-  -e MYSQL_USER="root" \
-  -e MYSQL_PASS="your_password" \
-  -e MYSQL_DB="your_database" \
-  -e ALLOW_INSERT_OPERATION="false" \
-  -e ALLOW_UPDATE_OPERATION="false" \
-  -e ALLOW_DELETE_OPERATION="false" \
-  -- npx @benborla29/mcp-server-mysql
-```
-
-#### Choosing the Right Scope
-
-Consider which scope to use based on your needs:
-
-```bash
-# Local scope (default) - only available in current project
-claude mcp add mcp_server_mysql [options...]
-
-# User scope - available across all your projects
-claude mcp add mcp_server_mysql -s user [options...]
-
-# Project scope - shared with team members via .mcp.json
-claude mcp add mcp_server_mysql -s project [options...]
-```
-
-For database servers with credentials, **local** or **user** scope is recommended to keep credentials private.
-
-#### Verification
-
-After adding the server, verify it's configured correctly:
-
-```bash
-# List all configured servers
-claude mcp list
-
-# Get details for your MySQL server
-claude mcp get mcp_server_mysql
-
-# Check server status within Claude Code
-/mcp
-```
-
-#### Multi-Database Configuration
-
-For multi-database mode, omit the `MYSQL_DB` environment variable:
-
-```bash
-claude mcp add mcp_server_mysql_multi \
-  -e MYSQL_HOST="127.0.0.1" \
-  -e MYSQL_PORT="3306" \
-  -e MYSQL_USER="root" \
-  -e MYSQL_PASS="your_password" \
-  -e MULTI_DB_WRITE_MODE="false" \
-  -- npx @benborla29/mcp-server-mysql
-```
-
-#### Advanced Configuration
-
-For advanced features, add additional environment variables:
-
-```bash
-claude mcp add mcp_server_mysql \
-  -e MYSQL_HOST="127.0.0.1" \
-  -e MYSQL_PORT="3306" \
-  -e MYSQL_USER="root" \
-  -e MYSQL_PASS="your_password" \
-  -e MYSQL_DB="your_database" \
-  -e MYSQL_POOL_SIZE="10" \
-  -e MYSQL_QUERY_TIMEOUT="30000" \
-  -e MYSQL_CACHE_TTL="60000" \
-  -e MYSQL_RATE_LIMIT="100" \
-  -e MYSQL_SSL="true" \
-  -e ALLOW_INSERT_OPERATION="false" \
-  -e ALLOW_UPDATE_OPERATION="false" \
-  -e ALLOW_DELETE_OPERATION="false" \
-  -e MYSQL_ENABLE_LOGGING="true" \
-  -- npx @benborla29/mcp-server-mysql
-```
-
-#### Troubleshooting Claude Code Setup
-
-1. **Server Connection Issues**: Use `/mcp` command in Claude Code to check server status and authenticate if needed.
-
-2. **Path Issues**: If using a local repository, ensure Node.js paths are correctly set:
+1. **克隆仓库**
 
    ```bash
-   # Find your Node.js path
-   which node
-
-   # For PATH environment variable
-   echo "$(which node)/../"
-
-   # For NODE_PATH environment variable
-   echo "$(which node)/../../lib/node_modules"
-   ```
-
-3. **Permission Errors**: Ensure your MySQL user has appropriate permissions for the operations you've enabled.
-
-4. **Server Not Starting**: Check Claude Code logs or run the server directly to debug:
-
-   ```bash
-   # Test the server directly
-   npx @benborla29/mcp-server-mysql
-   ```
-
-### Using NPM/PNPM
-
-For manual installation:
-
-```bash
-# Using npm
-npm install -g @benborla29/mcp-server-mysql
-
-# Using pnpm
-pnpm add -g @benborla29/mcp-server-mysql
-```
-
-After manual installation, you'll need to configure your LLM application to use the MCP server (see Configuration section below).
-
-### Running from Local Repository
-
-If you want to clone and run this MCP server directly from the source code, follow these steps:
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/benborla/mcp-server-mysql.git
+   git clone https://github.com/chenlinyang/mcp-server-mysql.git
    cd mcp-server-mysql
    ```
 
-2. **Install dependencies**
+2. **安装依赖项**
 
    ```bash
    npm install
-   # or
+   # 或
    pnpm install
    ```
 
-3. **Build the project**
+3. **构建项目**
 
    ```bash
    npm run build
-   # or
+   # 或
    pnpm run build
    ```
 
-4. **Configure Claude Desktop**
+4. **配置 Claud Code CLI**
 
-   Add the following to your Claude Desktop configuration file (`claude_desktop_config.json`):
+   将以下内容添加到您的 Claude Code CLI配置文件（Linux和MacOS一般是`~/.claude.json`，windows一般是`%USERPROFILE%/.claude.json`）：
 
    ```json
    {
@@ -298,155 +95,106 @@ If you want to clone and run this MCP server directly from the source code, foll
            "MYSQL_USER": "root",
            "MYSQL_PASS": "your_password",
            "MYSQL_DB": "your_database",
+           "MULTI_DB_WRITE_MODE": "false",
            "ALLOW_INSERT_OPERATION": "false",
            "ALLOW_UPDATE_OPERATION": "false",
-           "ALLOW_DELETE_OPERATION": "false",
-           "PATH": "/Users/atlasborla/Library/Application Support/Herd/config/nvm/versions/node/v22.9.0/bin:/usr/bin:/bin", // <--- Important to add the following, run in your terminal `echo "$(which node)/../"` to get the path
-           "NODE_PATH": "/Users/atlasborla/Library/Application Support/Herd/config/nvm/versions/node/v22.9.0/lib/node_modules" // <--- Important to add the following, run in your terminal `echo "$(which node)/../../lib/node_modules"`
+           "ALLOW_DELETE_OPERATION": "false"
          }
        }
      }
    }
    ```
 
-   Replace:
-   - `/path/to/node` with the full path to your Node.js binary (find it with `which node`)
-   - `/full/path/to/mcp-server-mysql` with the full path to where you cloned the repository
-   - Set the MySQL credentials to match your environment
+   替换：
 
-5. **Test the server**
+   - `/path/to/node` 为 Node.js 二进制文件的完整路径（使用 `which node` 找到它）
+   - `/full/path/to/mcp-server-mysql` 为您克隆仓库的完整路径
+   - 设置 MySQL 凭据以匹配您的环境
+
+5. **测试服务器**
 
    ```bash
-   # Run the server directly to test
+   # 直接运行服务器进行测试
    node dist/index.js
    ```
 
-   If it connects to MySQL successfully, you're ready to use it with Claude Desktop.
+   如果它成功连接到 MySQL，您就可以将其与 Claude Code CLI一起使用了。
 
-### Run in remote mode
+### 以全局模式安装运行
 
-To run in remote mode, you'll need to provide [environment variables](https://github.com/benborla/mcp-server-mysql?tab=readme-ov-file#environment-variables) to the npx script.
 
-1. Create env file in preferred directory
 
-   ```bash
-   # create .env file
-   touch .env
-   ```
+## 组件
 
-2. Copy-paste [example file](https://github.com/benborla/mcp-server-mysql/blob/main/.env) from this repository
-3. Set the MySQL credentials to match your environment
-4. Set `IS_REMOTE_MCP=true`
-5. Set `REMOTE_SECRET_KEY` to a secure string.
-6. Provide custom `PORT` if needed. Default is 3000.
-7. Load variables in current session:
+### 工具
 
-   ```bash
-   source .env
-   ```
+- mysql_query
+  - 对连接的数据库执行 SQL 查询
+  - 输入：`sql`（字符串）：要执行的 SQL 查询
+  - 默认情况下，仅限于只读操作
+  - 可选的写入操作（当通过配置启用时）：
+    - INSERT：向表中添加新数据（需要 `ALLOW_INSERT_OPERATION=true`）
+    - UPDATE：修改现有数据（需要 `ALLOW_UPDATE_OPERATION=true`）
+    - DELETE：删除数据（需要 `ALLOW_DELETE_OPERATION=true`）
+  - 所有操作都在事务中执行，并具有适当的提交 / 回滚处理
+  - 支持预准备语句以安全处理参数
+  - 可配置的查询超时和结果分页
+  - 内置查询执行统计信息
 
-8. Run the server
+### 资源
 
-   ```bash
-   npx @benborla29/mcp-server-mysql
-   ```
+服务器提供全面的数据库信息：
 
-9. Configure your agent to connect to the MCP with the next configuration:
+- 表模式
+  - 每个表的 JSON 模式信息
+  - 列名和数据类型
+  - 索引信息和约束
+  - 外键关系
+  - 表统计信息和指标
+  - 从数据库元数据自动发现
 
-   ```json
-   {
-     "mcpServers": {
-       "mysql": {
-         "url": "http://your-host:3000/mcp",
-         "type": "streamableHttp",
-         "headers": {
-           "Authorization": "Bearer <REMOTE_SECRET_KEY>"
-         }
-       }
-     }
-   }
-   ```
+### 安全功能
 
-## Components
+- 通过预准备语句防止 SQL 注入
+- 查询白名单 / 黑名单功能
+- 查询执行速率限制
+- 查询复杂度分析
+- 可配置的连接加密
+- 只读事务强制
 
-### Tools
+### 性能优化
 
-- **mysql_query**
-  - Execute SQL queries against the connected database
-  - Input: `sql` (string): The SQL query to execute
-  - By default, limited to READ ONLY operations
-  - Optional write operations (when enabled via configuration):
-    - INSERT: Add new data to tables (requires `ALLOW_INSERT_OPERATION=true`)
-    - UPDATE: Modify existing data (requires `ALLOW_UPDATE_OPERATION=true`)
-    - DELETE: Remove data (requires `ALLOW_DELETE_OPERATION=true`)
-  - All operations are executed within a transaction with proper commit/rollback handling
-  - Supports prepared statements for secure parameter handling
-  - Configurable query timeouts and result pagination
-  - Built-in query execution statistics
+- 优化的连接池
+- 查询结果缓存
+- 大结果集流
+- 查询执行计划分析
+- 可配置的查询超时
 
-### Resources
+### 监控和调试
 
-The server provides comprehensive database information:
+- 全面的查询日志记录
+- 性能指标收集
+- 错误跟踪和报告
+- 健康检查端点
+- 查询执行统计信息
 
-- **Table Schemas**
-  - JSON schema information for each table
-  - Column names and data types
-  - Index information and constraints
-  - Foreign key relationships
-  - Table statistics and metrics
-  - Automatically discovered from database metadata
+## 配置
 
-### Security Features
+您可以更新任何 MySQL 连接详细信息以及写入操作设置：
 
-- SQL injection prevention through prepared statements
-- Query whitelisting/blacklisting capabilities
-- Rate limiting for query execution
-- Query complexity analysis
-- Configurable connection encryption
-- Read-only transaction enforcement
+- **基本连接设置**：
+  - MySQL 主机、端口、用户、密码、数据库
+  - SSL/TLS 配置（如果您的数据库需要安全连接）
+- **写入操作权限**：
+  - 允许 INSERT 操作：如果您希望允许添加新数据，请设置为 true
+  - 允许 UPDATE 操作：如果您希望允许更新现有数据，请设置为 true
+  - 允许 DELETE 操作：如果您希望允许删除数据，请设置为 true
 
-### Performance Optimizations
+出于安全原因，所有写入操作默认都是禁用的。只有在您特别需要 Claude 修改数据库数据时才启用这些设置。
 
-- Optimized connection pooling
-- Query result caching
-- Large result set streaming
-- Query execution plan analysis
-- Configurable query timeouts
+### 高级配置选项
 
-### Monitoring and Debugging
-
-- Comprehensive query logging
-- Performance metrics collection
-- Error tracking and reporting
-- Health check endpoints
-- Query execution statistics
-
-## Configuration
-
-### Automatic Configuration with Smithery
-
-If you installed using Smithery, your configuration is already set up. You can view or modify it with:
-
-```bash
-smithery configure @benborla29/mcp-server-mysql
-```
-
-When reconfiguring, you can update any of the MySQL connection details as well as the write operation settings:
-
-- **Basic connection settings**:
-  - MySQL Host, Port, User, Password, Database
-  - SSL/TLS configuration (if your database requires secure connections)
-
-- **Write operation permissions**:
-  - Allow INSERT Operations: Set to true if you want to allow adding new data
-  - Allow UPDATE Operations: Set to true if you want to allow updating existing data
-  - Allow DELETE Operations: Set to true if you want to allow deleting data
-
-For security reasons, all write operations are disabled by default. Only enable these settings if you specifically need Claude to modify your database data.
-
-### Advanced Configuration Options
-
-For more control over the MCP server's behavior, you can use these advanced configuration options:
+要更好地控制 MCP 服务器的行为，您可以使用这些高级配置选项：
 
 ```json
 {
@@ -458,7 +206,7 @@ For more control over the MCP server's behavior, you can use these advanced conf
         "@benborla29/mcp-server-mysql"
       ],
       "env": {
-        // Basic connection settings
+        // 基本连接设置
         "MYSQL_HOST": "127.0.0.1",
         "MYSQL_PORT": "3306",
         "MYSQL_USER": "root",
@@ -466,22 +214,22 @@ For more control over the MCP server's behavior, you can use these advanced conf
         "MYSQL_DB": "db_name",
         "PATH": "/path/to/node/bin:/usr/bin:/bin",
 
-        // Performance settings
+        // 性能设置
         "MYSQL_POOL_SIZE": "10",
         "MYSQL_QUERY_TIMEOUT": "30000",
         "MYSQL_CACHE_TTL": "60000",
 
-        // Security settings
+        // 安全设置
         "MYSQL_RATE_LIMIT": "100",
         "MYSQL_MAX_QUERY_COMPLEXITY": "1000",
         "MYSQL_SSL": "true",
 
-        // Monitoring settings
+        // 监控设置
         "ENABLE_LOGGING": "true",
         "MYSQL_LOG_LEVEL": "info",
         "MYSQL_METRICS_ENABLED": "true",
 
-        // Write operation flags
+        // 写入操作标志
         "ALLOW_INSERT_OPERATION": "false",
         "ALLOW_UPDATE_OPERATION": "false",
         "ALLOW_DELETE_OPERATION": "false"
@@ -491,73 +239,73 @@ For more control over the MCP server's behavior, you can use these advanced conf
 }
 ```
 
-## Environment Variables
+## 环境变量
 
-### Basic Connection
+### 基本连接
 
-- `MYSQL_SOCKET_PATH`: Unix socket path for local connections (e.g., "/tmp/mysql.sock")
-- `MYSQL_HOST`: MySQL server host (default: "127.0.0.1") - ignored if MYSQL_SOCKET_PATH is set
-- `MYSQL_PORT`: MySQL server port (default: "3306") - ignored if MYSQL_SOCKET_PATH is set
-- `MYSQL_USER`: MySQL username (default: "root")
-- `MYSQL_PASS`: MySQL password
-- `MYSQL_DB`: Target database name (leave empty for multi-DB mode)
+- `MYSQL_SOCKET_PATH`：本地连接的 Unix 套接字路径（例如，"/tmp/mysql.sock"）
+- `MYSQL_HOST`：MySQL 服务器主机（默认："127.0.0.1"）- 如果设置了 MYSQL_SOCKET_PATH，则忽略
+- `MYSQL_PORT`：MySQL 服务器端口（默认："3306"）- 如果设置了 MYSQL_SOCKET_PATH，则忽略
+- `MYSQL_USER`：MySQL 用户名（默认："root"）
+- `MYSQL_PASS`：MySQL 密码
+- `MYSQL_DB`：目标数据库名称（多数据库模式留空）
 
-### Performance Configuration
+### 性能配置
 
-- `MYSQL_POOL_SIZE`: Connection pool size (default: "10")
-- `MYSQL_QUERY_TIMEOUT`: Query timeout in milliseconds (default: "30000")
-- `MYSQL_CACHE_TTL`: Cache time-to-live in milliseconds (default: "60000")
+- `MYSQL_POOL_SIZE`：连接池大小（默认："10"）
+- `MYSQL_QUERY_TIMEOUT`：查询超时（毫秒）（默认："30000"）
+- `MYSQL_CACHE_TTL`：缓存生存时间（毫秒）（默认："60000"）
 
-### Security Configuration
+### 安全配置
 
-- `MYSQL_RATE_LIMIT`: Maximum queries per minute (default: "100")
-- `MYSQL_MAX_QUERY_COMPLEXITY`: Maximum query complexity score (default: "1000")
-- `MYSQL_SSL`: Enable SSL/TLS encryption (default: "false")
-- `ALLOW_INSERT_OPERATION`: Enable INSERT operations (default: "false")
-- `ALLOW_UPDATE_OPERATION`: Enable UPDATE operations (default: "false")
-- `ALLOW_DELETE_OPERATION`: Enable DELETE operations (default: "false")
-- `ALLOW_DDL_OPERATION`: Enable DDL operations (default: "false")
-- `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS`: **[NEW]** Disable read-only transaction enforcement (default: "false") ⚠️ **Security Warning:** Only enable this if you need full write capabilities and trust the LLM with your database
-- `SCHEMA_INSERT_PERMISSIONS`: Schema-specific INSERT permissions
-- `SCHEMA_UPDATE_PERMISSIONS`: Schema-specific UPDATE permissions
-- `SCHEMA_DELETE_PERMISSIONS`: Schema-specific DELETE permissions
-- `SCHEMA_DDL_PERMISSIONS`: Schema-specific DDL permissions
-- `MULTI_DB_WRITE_MODE`: Enable write operations in multi-DB mode (default: "false")
+- `MYSQL_RATE_LIMIT`：每分钟最大查询数（默认："100"）
+- `MYSQL_MAX_QUERY_COMPLEXITY`：最大查询复杂度分数（默认："1000"）
+- `MYSQL_SSL`：启用 SSL/TLS 加密（默认："false"）
+- `ALLOW_INSERT_OPERATION`：启用 INSERT 操作（默认："false"）
+- `ALLOW_UPDATE_OPERATION`：启用 UPDATE 操作（默认："false"）
+- `ALLOW_DELETE_OPERATION`：启用 DELETE 操作（默认："false"）
+- `ALLOW_DDL_OPERATION`：启用 DDL 操作（默认："false"）
+- `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS`：**[新增]** 禁用只读事务强制（默认："false"）⚠️ **安全警告：** 仅在您需要完全写入权限且信任 LLM 处理您的数据库时启用此功能
+- `SCHEMA_INSERT_PERMISSIONS`：模式特定的 INSERT 权限
+- `SCHEMA_UPDATE_PERMISSIONS`：模式特定的 UPDATE 权限
+- `SCHEMA_DELETE_PERMISSIONS`：模式特定的 DELETE 权限
+- `SCHEMA_DDL_PERMISSIONS`：模式特定的 DDL 权限
+- `MULTI_DB_WRITE_MODE`：在多数据库模式下启用写入操作（默认："false"）
 
-### Monitoring Configuration
+### 监控配置
 
-- `MYSQL_ENABLE_LOGGING`: Enable query logging (default: "false")
-- `MYSQL_LOG_LEVEL`: Logging level (default: "info")
-- `MYSQL_METRICS_ENABLED`: Enable performance metrics (default: "false")
+- `MYSQL_ENABLE_LOGGING`：启用查询日志记录（默认："false"）
+- `MYSQL_LOG_LEVEL`：日志级别（默认："info"）
+- `MYSQL_METRICS_ENABLED`：启用性能指标（默认："false"）
 
-### Remote MCP Configuration
+### 远程 MCP 配置
 
-- `IS_REMOTE_MCP`: Enable remote MCP mode (default: "false")
-- `REMOTE_SECRET_KEY`: Secret key for remote MCP authentication (default: ""). If not provided, remote MCP mode will be disabled.
-- `PORT`: Port number for the remote MCP server (default: 3000)
+- `IS_REMOTE_MCP`：启用远程 MCP 模式（默认："false"）
+- `REMOTE_SECRET_KEY`：远程 MCP 身份验证的密钥（默认：""）。如果未提供，远程 MCP 模式将被禁用。
+- `PORT`：远程 MCP 服务器的端口号（默认：3000）
 
-## Multi-DB Mode
+## 多数据库模式
 
-MCP-Server-MySQL supports connecting to multiple databases when no specific database is set. This allows the LLM to query any database the MySQL user has access to. For full details, see [README-MULTI-DB.md](./README-MULTI-DB.md).
+当未设置特定数据库时，MCP-Server-MySQL 支持连接到多个数据库。这允许 LLM 查询 MySQL 用户有权访问的任何数据库。有关完整详情，请参见 [README-MULTI-DB.md](https://www.doubao.com/chat/README-MULTI-DB.md)。
 
-### Enabling Multi-DB Mode
+### 启用多数据库模式
 
-To enable multi-DB mode, simply leave the `MYSQL_DB` environment variable empty. In multi-DB mode, queries require schema qualification:
+要启用多数据库模式，只需将 `MYSQL_DB` 环境变量留空。在多数据库模式下，查询需要模式限定：
 
 ```sql
--- Use fully qualified table names
+-- 使用完全限定的表名
 SELECT * FROM database_name.table_name;
 
--- Or use USE statements to switch between databases
+-- 或者使用 USE 语句在数据库之间切换
 USE database_name;
 SELECT * FROM table_name;
 ```
 
-## Schema-Specific Permissions
+## 模式特定权限
 
-For fine-grained control over database operations, MCP-Server-MySQL now supports schema-specific permissions. This allows different databases to have different levels of access (read-only, read-write, etc.).
+为了对数据库操作进行细粒度控制，MCP-Server-MySQL 现在支持模式特定权限。这允许不同的数据库具有不同的访问级别（只读、读写等）。
 
-### Configuration Example
+### 配置示例
 
 ```txt
 SCHEMA_INSERT_PERMISSIONS=development:true,test:true,production:false
@@ -566,37 +314,36 @@ SCHEMA_DELETE_PERMISSIONS=development:false,test:true,production:false
 SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
 ```
 
-For complete details and security recommendations, see [README-MULTI-DB.md](./README-MULTI-DB.md).
+有关完整详情和安全建议，请参见 [README-MULTI-DB.md](https://www.doubao.com/chat/README-MULTI-DB.md)。
 
-## Testing
+## 测试
 
-### Database Setup
+### 数据库设置
 
-Before running tests, you need to set up the test database and seed it with test data:
+运行测试前，您需要设置测试数据库并填充测试数据：
 
-1. **Create Test Database and User**
+1. **创建测试数据库和用户**
 
    ```sql
-   -- Connect as root and create test database
+   -- 以 root 身份连接并创建测试数据库
    CREATE DATABASE IF NOT EXISTS mcp_test;
-
-   -- Create test user with appropriate permissions
+   
+   -- 创建具有适当权限的测试用户
    CREATE USER IF NOT EXISTS 'mcp_test'@'localhost' IDENTIFIED BY 'mcp_test_password';
    GRANT ALL PRIVILEGES ON mcp_test.* TO 'mcp_test'@'localhost';
    FLUSH PRIVILEGES;
    ```
 
-2. **Run Database Setup Script**
+2. **运行数据库设置脚本**
 
    ```bash
-   # Run the database setup script
-   pnpm run setup:test:db
+   # 运行数据库设置脚本
+   npm run setup:test:db
    ```
 
-   This will create the necessary tables and seed data. The script is located in `scripts/setup-test-db.ts`
+   这将创建必要的表和种子数据。该脚本位于 `scripts/setup-test-db.ts`
 
-3. **Configure Test Environment**
-   Create a `.env.test` file in the project root (if not existing):
+3. **配置测试环境**在项目根目录中创建 `.env.test` 文件（如果不存在）：
 
    ```env
    MYSQL_HOST=127.0.0.1
@@ -606,8 +353,9 @@ Before running tests, you need to set up the test database and seed it with test
    MYSQL_DB=mcp_test
    ```
 
-4. **Update package.json Scripts**
-   Add these scripts to your package.json:
+   
+
+4. **更新 package.json 脚本**将这些脚本添加到您的 package.json：
 
    ```json
    {
@@ -621,51 +369,55 @@ Before running tests, you need to set up the test database and seed it with test
    }
    ```
 
-### Running Tests
+   
 
-The project includes a comprehensive test suite to ensure functionality and reliability:
+### 运行测试
+
+该项目包括一个全面的测试套件，以确保功能和可靠性：
 
 ```bash
-# First-time setup
+# 首次设置
 pnpm run setup:test:db
 
-# Run all tests
+# 运行所有测试
 pnpm test
 ```
 
-## Running evals
+## 运行评估
 
-The evals package loads an mcp client that then runs the index.ts file, so there is no need to rebuild between tests. You can load environment variables by prefixing the npx command. Full documentation can be found at [MCP Evals](https://www.mcpevals.io/docs).
+评估包加载一个 mcp 客户端，然后运行 index.ts 文件，因此测试之间无需重建。您可以通过前缀 npx 命令来加载环境变量。完整文档可在 [MCP Evals](https://www.mcpevals.io/docs) 找到。
 
 ```bash
 OPENAI_API_KEY=your-key  npx mcp-eval evals.ts index.ts
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Common Issues
+### 常见问题
 
-1. **Connection Issues**
-   - Verify MySQL server is running and accessible
-   - Check credentials and permissions
-   - Ensure SSL/TLS configuration is correct if enabled
-   - Try connecting with a MySQL client to confirm access
+1. **连接问题**
 
-2. **Performance Issues**
-   - Adjust connection pool size
-   - Configure query timeout values
-   - Enable query caching if needed
-   - Check query complexity settings
-   - Monitor server resource usage
+   - 验证 MySQL 服务器是否正在运行且可访问
+   - 检查凭据和权限
+   - 如果启用，确保 SSL/TLS 配置正确
+   - 尝试使用 MySQL 客户端连接以确认访问权限
 
-3. **Security Restrictions**
-   - Review rate limiting configuration
-   - Check query whitelist/blacklist settings
-   - Verify SSL/TLS settings
-   - Ensure the user has appropriate MySQL permissions
+2. **性能问题**
 
-4. **Path Resolution**
-   If you encounter an error "Could not connect to MCP server mcp-server-mysql", explicitly set the path of all required binaries:
+   - 调整连接池大小
+   - 配置查询超时值
+   - 必要时启用查询缓存
+   - 检查查询复杂度设置
+   - 监控服务器资源使用情况
+
+3. **安全限制**
+
+   - 查看速率限制配置
+   - 检查查询白名单 / 黑名单设置
+   - 验证 SSL/TLS 设置
+   - 确保用户具有适当的 MySQL 权限
+
+4. **路径解析**如果遇到错误 "Could not connect to MCP server mcp-server-mysql"，显式设置所有必需二进制文件的路径：
 
    ```json
    {
@@ -675,115 +427,16 @@ OPENAI_API_KEY=your-key  npx mcp-eval evals.ts index.ts
    }
    ```
 
-   *Where can I find my `node` bin path*
-   Run the following command to get it:
+   *我在哪里可以找到我的 `node` 二进制路径*运行以下命令获取：
 
-   For **PATH**
+   对于 **PATH**
 
    ```bash
    echo "$(which node)/../"
    ```
 
-   For **NODE_PATH**
+   对于 **NODE_PATH**
 
    ```bash
    echo "$(which node)/../../lib/node_modules"
    ```
-
-5. **Claude Desktop Specific Issues**
-   - If you see "Server disconnected" logs in Claude Desktop, check the logs at `~/Library/Logs/Claude/mcp-server-mcp_server_mysql.log`
-   - Ensure you're using the absolute path to both the Node binary and the server script
-   - Check if your `.env` file is being properly loaded; use explicit environment variables in the configuration
-   - Try running the server directly from the command line to see if there are connection issues
-   - If you need write operations (INSERT, UPDATE, DELETE), set the appropriate flags to "true" in your configuration:
-
-     ```json
-     "env": {
-       "ALLOW_INSERT_OPERATION": "true",  // Enable INSERT operations
-       "ALLOW_UPDATE_OPERATION": "true",  // Enable UPDATE operations
-       "ALLOW_DELETE_OPERATION": "true"   // Enable DELETE operations
-     }
-     ```
-
-   - Ensure your MySQL user has the appropriate permissions for the operations you're enabling
-   - For direct execution configuration, use:
-
-     ```json
-     {
-       "mcpServers": {
-         "mcp_server_mysql": {
-           "command": "/full/path/to/node",
-           "args": [
-             "/full/path/to/mcp-server-mysql/dist/index.js"
-           ],
-           "env": {
-             "MYSQL_HOST": "127.0.0.1",
-             "MYSQL_PORT": "3306",
-             "MYSQL_USER": "root",
-             "MYSQL_PASS": "your_password",
-             "MYSQL_DB": "your_database"
-           }
-         }
-       }
-     }
-     ```
-
-6. **Authentication Issues**
-   - For MySQL 8.0+, ensure the server supports the `caching_sha2_password` authentication plugin
-   - Check if your MySQL user is configured with the correct authentication method
-   - Try creating a user with legacy authentication if needed:
-
-     ```sql
-     CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-     ```
-
-     @lizhuangs
-
-7. I am encountering `Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'dotenv' imported from` error
-   try this workaround:
-
-   ```bash
-   npx -y -p @benborla29/mcp-server-mysql -p dotenv mcp-server-mysql
-   ```
-
-   Thanks to @lizhuangs
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request to
-[https://github.com/benborla/mcp-server-mysql](https://github.com/benborla/mcp-server-mysql)
-
-## Many Thanks to the following Contributors
-
-[![Contributors](https://contrib.rocks/image?repo=benborla/mcp-server-mysql)](https://github.com/benborla/mcp-server-mysql/graphs/contributors)
-
-### Development Setup
-
-1. Clone the repository
-2. Install dependencies: `pnpm install`
-3. Build the project: `pnpm run build`
-4. Run tests: `pnpm test`
-
-### Project Roadmap
-
-We're actively working on enhancing this MCP server. Check our [CHANGELOG.md](./CHANGELOG.md) for details on planned features, including:
-
-- Enhanced query capabilities with prepared statements
-- Advanced security features
-- Performance optimizations
-- Comprehensive monitoring
-- Expanded schema information
-
-If you'd like to contribute to any of these areas, please check the issues on GitHub or open a new one to discuss your ideas.
-
-### Submitting Changes
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Submit a pull request
-
-## License
-
-This MCP server is licensed under the MIT License. See the LICENSE file for details.

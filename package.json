@@ -1,9 +1,9 @@
 {
-  "name": "@bulgariamitko/mcp-server-mysql-write",
-  "version": "2.0.6",
-  "description": "MCP server for interacting with MySQL databases with write operations support (modified from @benborla29/mcp-server-mysql)",
+  "name": "@marco/mcp-server-mysql",
+  "version": "1.0.0",
+  "description": "MCP server for interacting with MySQL databases with write operations support (modified from @marco/mcp-server-mysql)",
   "license": "MIT",
-  "author": "Dimitar Klaturov (https://github.com/bulgariamitko) - Modified from Ben Borla (https://github.com/benborla)",
+  "author": "C.LY (https://github.com/chenlinyang) - Modified from Dimitar Klaturov (https://github.com/bulgariamitko) and Ben Borla (https://github.com/benborla)",
   "type": "module",
   "main": "dist/index.js",
   "module": "index.ts",

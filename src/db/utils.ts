@@ -67,6 +67,12 @@ function validateDatabaseAccess(sql: string, targetDb: string): { isValid: boole
       const dbMatch = match.match(/^`?([a-zA-Z0-9_]+)`?/i);
       if (dbMatch && dbMatch[1]) {
         const referencedDb = dbMatch[1].toLowerCase().trim();
+
+        // Allow access to information_schema (MySQL system database)
+        if (referencedDb === 'information_schema' || referencedDb === 'performance_schema') {
+          continue; // Skip system databases - they're always accessible
+        }
+
         if (referencedDb !== normalizedTargetDb) {
           return {
             isValid: false,
