@@ -1,14 +1,21 @@
-# MySQL  MCP 服务 - Claude Code
+# MySQL MCP 服务 - Claude Code
 
-> **🚀 这是一个优化版，适用于 Claude Code 并支持 SSH 隧道****原作者：** [@benborla29](https://github.com/benborla)**原仓库：** https://github.com/benborla/mcp-server-mysql**许可证：** MIT
+> **🚀 这是一个优化版，适用于 Claude Code 并支持 SSH 隧道**
+>
+> **原作者：** [@benborla29](https://github.com/benborla)
+>
+> **原仓库：** https://github.com/benborla/mcp-server-mysql
+>
+> **许可证：** MIT
 
 # 基于 NodeJS 的 MySQL MCP 服务
 
-![img](data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2781%27%20height=%2710%27/%3e)![image](https://archestra.ai/mcp-catalog/api/badge/quality/benborla/mcp-server-mysql)
+> **🌟该项目如对您有帮助，欢迎点赞🌟**
 
 ### 此分支的主要特点：
 
-- ✅ **Claude Code 集成** - 优化版用于 Anthropic 的 Claude Code CLI
+- ✅ **最新 Claude Code 兼容** - 完全兼容最新版本的 Claude Code CLI，提供稳定的数据库访问体验
+- ✅ **增强数据库访问验证** - 当设置 `MYSQL_DB` 时，严格验证 SQL 查询的数据库访问，确保查询只作用于指定数据库，避免意外的跨库操作
 - ✅ **SSH 隧道支持** - 内置支持远程数据库的 SSH 隧道
 - ✅ **自动启动 / 停止钩子** - 与 Claude 启动 / 停止配合的自动隧道管理
 - ✅ **DDL 操作** - 添加了 `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS` 以支持 `CREATE TABLE`
@@ -16,24 +23,42 @@
 
 ### Claude Code 用户快速入门：
 
-1. **阅读设置指南**：详见 [PROJECT_SETUP_GUIDE.md] 获取详细说明
+1. **阅读设置指南**：详见 [PROJECT_SETUP_GUIDE.md](PROJECT_SETUP_GUIDE.md) 获取详细说明
 2. **配置 SSH 隧道**：为远程数据库设置自动 SSH 隧道
 3. **与 Claude 配合使用**：集成的 MCP 服务与 Claude Code 无缝协作
 
-一个模型上下文协议服务器、，通过 SSH 隧道提供对 MySQL 数据库的访问。该服务器使 Claude 和其他大型语言模型能够安全地检查数据库模式和执行 SQL 查询。
+一个模型上下文协议服务器，通过 SSH 隧道提供对 MySQL 数据库的访问。该服务器使 Claude 和其他大型语言模型能够安全地检查数据库模式和执行 SQL 查询。
 
 ## 目录
 
 - [要求](#要求)
-- 安装
-  - [Smithery](#使用-smithery)
-  - [克隆到本地仓库](#从本地仓库运行)
+- [安装](#安装)
+  - [Claude Code](#claude-code)
+  - [从本地仓库运行](#从本地仓库运行)
+  - [以全局模式安装运行](#以全局模式安装运行)
 - [组件](#组件)
-- [配置](h#配置)
+  - [工具](#工具)
+  - [资源](#资源)
+  - [安全功能](#安全功能)
+  - [性能优化](#性能优化)
+  - [监控和调试](#监控和调试)
+- [配置](#配置)
+  - [高级配置选项](#高级配置选项)
 - [环境变量](#环境变量)
+  - [基本连接](#基本连接)
+  - [性能配置](#性能配置)
+  - [安全配置](#安全配置)
+  - [监控配置](#监控配置)
 - [多数据库模式](#多数据库模式)
 - [模式特定权限](#模式特定权限)
 - [测试](#测试)
+  - [数据库设置](#数据库设置)
+  - [运行测试](#运行测试)
+- [运行评估](#运行评估)
+- [故障排除](#故障排除)
+- [许可证](#许可证)
+- [贡献](#贡献)
+- [原项目](#原项目)
 
 ## 要求
 
@@ -46,9 +71,12 @@
 
 ### Claude Code
 
+本项目专为 Claude Code CLI 优化，提供完整的 MySQL 数据库访问功能。请按照下方的安装指南进行配置。
+
 ### 从本地仓库运行
 
 如果直接从源代码克隆并运行此 MCP 服务，请按照以下步骤操作：
+> 👉代码地址：[github](https://github.com/chenlinyang/mcp-server-mysql) 或 [gitee](https://gitee.com/chenlinyang/mcp-server-mysql)
 
 1. **克隆仓库**
 
@@ -73,7 +101,7 @@
    pnpm run build
    ```
 
-4. **配置 Claud Code CLI**
+4. **配置 Claude Code CLI**
 
    将以下内容添加到您的 Claude Code CLI配置文件（Linux和MacOS一般是`~/.claude.json`，windows一般是`%USERPROFILE%/.claude.json`）：
 
@@ -118,31 +146,28 @@
 
 ### 以全局模式安装运行
 
-1. **手动安装**
+1. **全局安装**
 
-	```bash
+   ```bash
    # 全局安装
    npm install -g @chenlinyang/mcp-server-mysql
-	
-	# 或者使用 pnpm
-	pnpm add -g @chenlinyang/mcp-server-mysql
-	```
 
-安装后就可以直接使用：
+   # 或者使用 pnpm
+   pnpm add -g @chenlinyang/mcp-server-mysql
+   ```
 
-mcp-server-mysql
+2. **配置 Claude Code CLI**
+- **方法一：使用命令行**
 
-2. **配置 Claud Code CLI**
-- 方法一：
+   ```bash
+   claude mcp add -s user mysql -- npx -y "@chenlinyang/mcp-server-mysql"
+   ```
 
-```bash
-	claude mcp add -s user mysql -- npx -y "@chenlinyang/mcp-server-mysql"
-```
+- **方法二：手动配置**
 
-- 方法二：
-	将以下内容添加到您的 Claude Code CLI配置文件（`.claude.json`）
+   将以下内容添加到您的 Claude Code CLI 配置文件（`.claude.json`）：
 
-```json
+   ```json
    {
      "mcpServers": {
        "mcp_server_mysql": {
@@ -154,19 +179,22 @@ mcp-server-mysql
        }
      }
    }
-```
+   ```
 
-3. **在首选目录中创建 env 文件**
+3. **在首选目录中创建 .env 文件**
 
-```bash
+   ```bash
    # 创建 .env 文件
-	touch .env
-```
-从此仓库 .env 文件复制粘贴
+   touch .env
+   ```
+
+   将此仓库中的 .env 文件内容复制粘贴到您刚创建的 .env 文件中。
 
 4. **验证**
-- 添加服务后，验证其配置是否正确
-```bash
+
+   添加服务后，验证其配置是否正确：
+
+   ```bash
 # 列出所有配置的MCP服务
 claude mcp list
 
@@ -220,6 +248,7 @@ claude mcp get mcp_server_mysql
 ### 安全功能
 
 - 通过预准备语句防止 SQL 注入
+- **增强数据库访问控制** - 当设置 `MYSQL_DB` 时，自动验证并阻止跨数据库查询，确保数据安全
 - 查询白名单 / 黑名单功能
 - 查询执行速率限制
 - 查询复杂度分析
@@ -289,7 +318,7 @@ claude mcp get mcp_server_mysql
         "MYSQL_SSL": "true",
 
         // 监控设置
-        "ENABLE_LOGGING": "true",
+        "MYSQL_ENABLE_LOGGING": "true",
         "MYSQL_LOG_LEVEL": "info",
         "MYSQL_METRICS_ENABLED": "true",
 
@@ -312,7 +341,7 @@ claude mcp get mcp_server_mysql
 - `MYSQL_PORT`：MySQL 服务器端口（默认："3306"）- 如果设置了 MYSQL_SOCKET_PATH，则忽略
 - `MYSQL_USER`：MySQL 用户名（默认："root"）
 - `MYSQL_PASS`：MySQL 密码
-- `MYSQL_DB`：目标数据库名称（多数据库模式留空）
+- `MYSQL_DB`：目标数据库名称（多数据库模式留空）- **增强功能**：设置后将严格限制查询只访问此数据库，防止意外的跨库操作
 
 ### 性能配置
 
@@ -344,7 +373,7 @@ claude mcp get mcp_server_mysql
 
 ## 多数据库模式
 
-当未设置特定数据库时，MCP-Server-MySQL 支持连接到多个数据库。这允许 LLM 查询 MySQL 用户有权访问的任何数据库。有关完整详情，请参见 [README-MULTI-DB.md](https://www.doubao.com/chat/README-MULTI-DB.md)。
+当未设置特定数据库时，MCP-Server-MySQL 支持连接到多个数据库。这允许 LLM 查询 MySQL 用户有权访问的任何数据库。有关完整详情，请参见 [README-MULTI-DB.md](README-MULTI-DB.md)。
 
 ### 启用多数据库模式
 
@@ -372,7 +401,7 @@ SCHEMA_DELETE_PERMISSIONS=development:false,test:true,production:false
 SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
 ```
 
-有关完整详情和安全建议，请参见 [README-MULTI-DB.md]。
+有关完整详情和安全建议，请参见 [README-MULTI-DB.md](README-MULTI-DB.md)。
 
 ## 测试
 
@@ -401,7 +430,9 @@ SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
 
    这将创建必要的表和种子数据。该脚本位于 `scripts/setup-test-db.ts`
 
-3. **配置测试环境**在项目根目录中创建 `.env.test` 文件（如果不存在）：
+3. **配置测试环境**
+
+   在项目根目录中创建 `.env.test` 文件（如果不存在）：
 
    ```env
    MYSQL_HOST=127.0.0.1
@@ -411,9 +442,9 @@ SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
    MYSQL_DB=mcp_test
    ```
 
-   
+4. **更新 package.json 脚本**
 
-4. **更新 package.json 脚本**将这些脚本添加到您的 package.json：
+   将这些脚本添加到您的 package.json：
 
    ```json
    {
@@ -426,8 +457,6 @@ SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
      }
    }
    ```
-
-   
 
 ### 运行测试
 
@@ -475,7 +504,15 @@ OPENAI_API_KEY=your-key  npx mcp-eval evals.ts index.ts
    - 验证 SSL/TLS 设置
    - 确保用户具有适当的 MySQL 权限
 
-4. **路径解析**如果遇到错误 "Could not connect to MCP server mcp-server-mysql"，显式设置所有必需二进制文件的路径：
+4. **数据库访问验证问题**
+
+   - 如果设置了 `MYSQL_DB` 但仍然收到跨数据库访问错误，请检查 SQL 查询中是否明确指定了数据库名称
+   - 确保所有表引用都指向正确的数据库，使用 `database.table` 格式或先执行 `USE database` 语句
+   - 在单数据库模式下，系统会自动阻止对其他数据库的访问以提高安全性
+
+5. **路径解析**
+
+   如果遇到错误 "Could not connect to MCP server mcp-server-mysql"，显式设置所有必需二进制文件的路径：
 
    ```json
    {
@@ -485,16 +522,30 @@ OPENAI_API_KEY=your-key  npx mcp-eval evals.ts index.ts
    }
    ```
 
-   *我在哪里可以找到我的 `node` 二进制路径*运行以下命令获取：
+   **我在哪里可以找到我的 `node` 二进制路径？**
 
-   对于 **PATH**
+   运行以下命令获取：
 
-   ```bash
-   echo "$(which node)/../"
-   ```
+   - 对于 **PATH**：
 
-   对于 **NODE_PATH**
+     ```bash
+     echo "$(which node)/../"
+     ```
 
-   ```bash
-   echo "$(which node)/../../lib/node_modules"
-   ```
+   - 对于 **NODE_PATH**：
+
+     ```bash
+     echo "$(which node)/../../lib/node_modules"
+     ```
+
+## 许可证
+
+本项目基于 MIT 许可证开源。详见 [LICENSE](LICENSE) 文件。
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request 来改进这个项目。
+
+## 原项目
+
+本项目是基于 [@benborla29](https://github.com/benborla) 的 [mcp-server-mysql](https://github.com/benborla/mcp-server-mysql) 项目的优化版本，专门针对 Claude Code 进行了增强优化。
