@@ -208,7 +208,7 @@
 
 - 结合agent进行架构分析
 
-> ** 数据库架构师** 提示词参考`.claude\agents\database-architect.md`
+> **数据库架构师** 提示词参考`.claude\agents\database-architect.md`
 
 <img src="./assets/agent-analysis-1.png" width = "996" alt="结合agent进行架构分析1" />
 
