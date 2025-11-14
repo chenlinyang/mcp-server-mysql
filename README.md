@@ -2,7 +2,7 @@
 
 > **🚀 这是一个优化版，适用于 Claude Code 并支持 SSH 隧道****原作者：** [@benborla29](https://github.com/benborla)**原仓库：** https://github.com/benborla/mcp-server-mysql**许可证：** MIT
 
-# 基于 NodeJS 的 MySQL MCP 服务器
+# 基于 NodeJS 的 MySQL MCP 服务
 
 ![img](data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2781%27%20height=%2710%27/%3e)![image](https://archestra.ai/mcp-catalog/api/badge/quality/benborla/mcp-server-mysql)
 
@@ -11,40 +11,36 @@
 - ✅ **Claude Code 集成** - 优化版用于 Anthropic 的 Claude Code CLI
 - ✅ **SSH 隧道支持** - 内置支持远程数据库的 SSH 隧道
 - ✅ **自动启动 / 停止钩子** - 与 Claude 启动 / 停止配合的自动隧道管理
-- ✅ **DDL 操作** - 添加了 `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS` 以支持 CREATE TABLE
+- ✅ **DDL 操作** - 添加了 `MYSQL_DISABLE_READ_ONLY_TRANSACTIONS` 以支持 `CREATE TABLE`
 - ✅ **多项目设置** - 轻松配置多个具有不同数据库的项目
 
 ### Claude Code 用户快速入门：
 
-1. **阅读设置指南**：详见 [PROJECT_SETUP_GUIDE.md](https://www.doubao.com/chat/PROJECT_SETUP_GUIDE.md) 获取详细说明
+1. **阅读设置指南**：详见 [PROJECT_SETUP_GUIDE.md] 获取详细说明
 2. **配置 SSH 隧道**：为远程数据库设置自动 SSH 隧道
 3. **与 Claude 配合使用**：集成的 MCP 服务与 Claude Code 无缝协作
 
-一个模型上下文协议服务器，通过 SSH 隧道提供对 MySQL 数据库的访问。该服务器使 Claude 和其他大型语言模型能够安全地检查数据库模式和执行 SQL 查询。
+一个模型上下文协议服务器、，通过 SSH 隧道提供对 MySQL 数据库的访问。该服务器使 Claude 和其他大型语言模型能够安全地检查数据库模式和执行 SQL 查询。
 
 ## 目录
 
-- [要求](https://www.doubao.com/chat/29099296980827906#要求)
+- [要求](#要求)
 - 安装
-  - [Smithery](https://www.doubao.com/chat/29099296980827906#使用-smithery)
-  - [克隆到本地仓库](https://www.doubao.com/chat/29099296980827906#从本地仓库运行)
-  - [远程模式](https://www.doubao.com/chat/29099296980827906#以远程模式运行)
-- [组件](https://www.doubao.com/chat/29099296980827906#组件)
-- [配置](https://www.doubao.com/chat/29099296980827906#配置)
-- [环境变量](https://www.doubao.com/chat/29099296980827906#环境变量)
-- [多数据库模式](https://www.doubao.com/chat/29099296980827906#多数据库模式)
-- [模式特定权限](https://www.doubao.com/chat/29099296980827906#模式特定权限)
-- [测试](https://www.doubao.com/chat/29099296980827906#测试)
-- [故障排除](https://www.doubao.com/chat/29099296980827906#故障排除)
-- [贡献](https://www.doubao.com/chat/29099296980827906#贡献)
-- [许可证](https://www.doubao.com/chat/29099296980827906#许可证)
+  - [Smithery](#使用-smithery)
+  - [克隆到本地仓库](#从本地仓库运行)
+- [组件](#组件)
+- [配置](h#配置)
+- [环境变量](#环境变量)
+- [多数据库模式](#多数据库模式)
+- [模式特定权限](#模式特定权限)
+- [测试](#测试)
 
 ## 要求
 
 - Node.js v22 或更高版本
 - MySQL 5.7 或更高版本（推荐 MySQL 8.0+）
 - 具有所需操作适当权限的 MySQL 用户
-- 对于写入操作：具有 INSERT、UPDATE 或 DELETE 权限的 MySQL 用户
+- 对于写入操作：具有 INSERT、UPDATE 和 DELETE 权限的 MySQL 用户
 
 ## 安装
 
@@ -52,7 +48,7 @@
 
 ### 从本地仓库运行
 
-如果要直接从源代码克隆并运行此 MCP 服务器，请按照以下步骤操作：
+如果直接从源代码克隆并运行此 MCP 服务，请按照以下步骤操作：
 
 1. **克隆仓库**
 
@@ -111,10 +107,10 @@
    - `/full/path/to/mcp-server-mysql` 为您克隆仓库的完整路径
    - 设置 MySQL 凭据以匹配您的环境
 
-5. **测试服务器**
+5. **测试服务**
 
    ```bash
-   # 直接运行服务器进行测试
+   # 直接运行服务进行测试
    node dist/index.js
    ```
 
@@ -122,7 +118,75 @@
 
 ### 以全局模式安装运行
 
+1. **手动安装**
 
+	```bash
+   # 全局安装
+   npm install -g @chenlinyang/mcp-server-mysql
+	
+	# 或者使用 pnpm
+	pnpm add -g @chenlinyang/mcp-server-mysql
+	```
+
+安装后就可以直接使用：
+
+mcp-server-mysql
+
+2. **配置 Claud Code CLI**
+- 方法一：
+
+```bash
+	claude mcp add -s user mysql -- npx -y "@chenlinyang/mcp-server-mysql"
+```
+
+- 方法二：
+	将以下内容添加到您的 Claude Code CLI配置文件（`.claude.json`）
+
+```json
+   {
+     "mcpServers": {
+       "mcp_server_mysql": {
+         "command": "npx",
+         "args": [
+           "@chenlinyang/mcp-server-mysql"
+         ],
+         "env": { }
+       }
+     }
+   }
+```
+
+3. **在首选目录中创建 env 文件**
+
+```bash
+   # 创建 .env 文件
+	touch .env
+```
+从此仓库 .env 文件复制粘贴
+
+4. **验证**
+- 添加服务后，验证其配置是否正确
+```bash
+# 列出所有配置的MCP服务
+claude mcp list
+
+# 获取 MySQL 服务器的详细信息
+claude mcp get mcp_server_mysql
+
+# 在 Claude Code 中检查服务状态
+/mcp
+```
+<img src="./assets/mcp-list.png" width = "996" alt="列出所有配置的MCP服务" />
+
+- 执行简单的统计分析
+
+<img src="./assets/single-analysis.png" width = "996" alt="简单的统计分析" />
+
+- 结合agent进行架构分析
+
+<img src="./assets/agent-analysis-1.png" width = "996" alt="结合agent进行架构分析1" />
+
+<img src="./assets/agent-analysis-2.png" width = "996" alt="结合agent进行架构分析2" />
 
 ## 组件
 
@@ -143,7 +207,7 @@
 
 ### 资源
 
-服务器提供全面的数据库信息：
+服务提供全面的数据库信息：
 
 - 表模式
   - 每个表的 JSON 模式信息
@@ -194,7 +258,7 @@
 
 ### 高级配置选项
 
-要更好地控制 MCP 服务器的行为，您可以使用这些高级配置选项：
+要更好地控制 MCP 服务的行为，您可以使用这些高级配置选项：
 
 ```json
 {
@@ -203,7 +267,7 @@
       "command": "/path/to/npx/binary/npx",
       "args": [
         "-y",
-        "@benborla29/mcp-server-mysql"
+        "@chenlinyang/mcp-server-mysql"
       ],
       "env": {
         // 基本连接设置
@@ -278,12 +342,6 @@
 - `MYSQL_LOG_LEVEL`：日志级别（默认："info"）
 - `MYSQL_METRICS_ENABLED`：启用性能指标（默认："false"）
 
-### 远程 MCP 配置
-
-- `IS_REMOTE_MCP`：启用远程 MCP 模式（默认："false"）
-- `REMOTE_SECRET_KEY`：远程 MCP 身份验证的密钥（默认：""）。如果未提供，远程 MCP 模式将被禁用。
-- `PORT`：远程 MCP 服务器的端口号（默认：3000）
-
 ## 多数据库模式
 
 当未设置特定数据库时，MCP-Server-MySQL 支持连接到多个数据库。这允许 LLM 查询 MySQL 用户有权访问的任何数据库。有关完整详情，请参见 [README-MULTI-DB.md](https://www.doubao.com/chat/README-MULTI-DB.md)。
@@ -314,7 +372,7 @@ SCHEMA_DELETE_PERMISSIONS=development:false,test:true,production:false
 SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
 ```
 
-有关完整详情和安全建议，请参见 [README-MULTI-DB.md](https://www.doubao.com/chat/README-MULTI-DB.md)。
+有关完整详情和安全建议，请参见 [README-MULTI-DB.md]。
 
 ## 测试
 

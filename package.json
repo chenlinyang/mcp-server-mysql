@@ -1,9 +1,9 @@
 {
-  "name": "@marco/mcp-server-mysql",
-  "version": "1.0.0",
+  "name": "@chenlinyang/mcp-server-mysql",
+  "version": "1.0.1",
   "description": "MCP server for interacting with MySQL databases with write operations support (modified from @marco/mcp-server-mysql)",
   "license": "MIT",
-  "author": "C.LY (https://github.com/chenlinyang) - Modified from Dimitar Klaturov (https://github.com/bulgariamitko) and Ben Borla (https://github.com/benborla)",
+  "author": "chenlinyang (https://github.com/chenlinyang) - Modified from Dimitar Klaturov (https://github.com/bulgariamitko) and Ben Borla (https://github.com/benborla)",
   "type": "module",
   "main": "dist/index.js",
   "module": "index.ts",
