@@ -1,10 +1,8 @@
 # MySQL MCP 服务 - Claude Code
 
-> **🚀 这是一个优化版，适用于 Claude Code 并支持 SSH 隧道**
->
-> **原作者：** [@benborla29](https://github.com/benborla)
->
-> **原仓库：** https://github.com/benborla/mcp-server-mysql
+> **🚀 这是一个优化版，适用于最新版本 Claude Code **
+> 
+> ** 原项目地址：** https://github.com/benborla/mcp-server-mysql
 >
 > **许可证：** MIT
 
