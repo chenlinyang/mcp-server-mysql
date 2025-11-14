@@ -97,7 +97,7 @@
    pnpm run build
    ```
 
-4. **配置 Claude Code **
+4. **配置 Claude Code**
 
    将以下内容添加到您的 Claude Code 配置文件（Linux和MacOS一般是`~/.claude.json`，windows一般是`%USERPROFILE%/.claude.json`）：
 
@@ -152,7 +152,7 @@
    pnpm add -g @chenlinyang/mcp-server-mysql
    ```
 
-2. **配置 Claude Code **
+2. **配置 Claude Code**
 - **方法一：使用命令行**
 
    ```bash
@@ -190,7 +190,7 @@
 
       添加服务后，验证其配置是否正确：
 
-```bash
+    ```bash
        # 列出所有配置的MCP服务
        claude mcp list
     
@@ -199,7 +199,7 @@
     
        # 在 Claude Code 中检查服务状态
        /mcp
-```
+    ```
 <img src="./assets/mcp-list.png" width = "996" alt="列出所有配置的MCP服务" />
 
 - 执行简单的统计分析
