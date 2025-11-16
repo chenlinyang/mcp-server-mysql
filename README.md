@@ -57,7 +57,7 @@
 
 ## 要求
 
-- Node.js v22 或更高版本
+- Node.js v20 或更高版本
 - MySQL 5.7 或更高版本（推荐 MySQL 8.0+）
 - 具有所需操作适当权限的 MySQL 用户
 - 对于写入操作：具有 INSERT、UPDATE 和 DELETE 权限的 MySQL 用户
@@ -184,7 +184,28 @@
    ```
 
    将此仓库中的 .env 文件内容复制粘贴到您刚创建的 .env 文件中。
+   
+   首选目录 `.env` 文件主要环境变量：
 
+   ```properties
+    # 基本连接设置
+    MYSQL_HOST=127.0.0.1
+
+    MYSQL_PORT=3306
+    MYSQL_USER=root
+    MYSQL_PASS=root
+    MYSQL_DB=test_db
+    
+    # 写入操作标识
+    ALLOW_INSERT_OPERATION=false
+    ALLOW_UPDATE_OPERATION=false
+    ALLOW_DELETE_OPERATION=false
+    ALLOW_DDL_OPERATION=true
+    
+    # 在多数据库模式下启用写入操作
+    MULTI_DB_WRITE_MODE=false
+   ```
+   
 4. **测试验证**
 
    添加服务后，测试验证其配置是否正确：

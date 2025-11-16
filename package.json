@@ -1,7 +1,7 @@
 {
   "name": "@chenlinyang/mcp-server-mysql",
-  "version": "1.0.1",
-  "description": "MCP server for interacting with MySQL databases with write operations support (modified from @marco/mcp-server-mysql)",
+  "version": "1.0.2",
+  "description": "MCP server for interacting with MySQL databases with write operations support (modified from @benborla29/mcp-server-mysql)",
   "license": "MIT",
   "author": "chenlinyang (https://github.com/chenlinyang) - Modified from Dimitar Klaturov (https://github.com/bulgariamitko) and Ben Borla (https://github.com/benborla)",
   "type": "module",
@@ -13,8 +13,7 @@
   },
   "files": [
     "dist",
-    "README.md",
-    "assets"
+    "README.md"
   ],
   "scripts": {
     "start": "node dist/index.js",
