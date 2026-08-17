@@ -1,3 +1,5 @@
+
+
 # MySQL MCP 服务 - Claude Code
 
 > **🚀 这是一个 MySQL MCP 服务，适用于最新版本 Claude Code**
@@ -467,7 +469,7 @@ SCHEMA_DDL_PERMISSIONS=development:false,test:true,production:false
    ```json
    {
      "scripts": {
-       "setup:test:db": "ts-node scripts/setup-test-db.ts",
+       "setup:test:db": "tsx scripts/setup-test-db.ts",
        "pretest": "pnpm run setup:test:db",
        "test": "vitest run",
        "test:watch": "vitest",
